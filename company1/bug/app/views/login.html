@@ -1,0 +1,30 @@
+  <div style="width: 100%;" class="sas-login">
+   <div class="row login-top">
+    <div class="col-xs-3 col-sm-3">
+     <img src="/images/logo2.png" class="img-responsive" />
+    </div>
+   </div>
+   <div class="row main-body">
+    <p>{{title}}</p>
+    <div class="login-img"></div>
+    <div class="login-div">
+     <form name='loginForm'>
+      <div class="form-group has-success has-feedback">
+       <div class="input-group">
+        <span class="input-group-addon glyphicon glyphicon-user"></span> 
+        <input type="text" class="form-control" id="account" [(ngModel)]='user.account'name='account' required onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"/>
+       </div>
+      </div>
+      <div class="form-group has-success has-feedback">
+       <div class="input-group">
+        <span class="input-group-addon glyphicon glyphicon-lock"></span> 
+        <input type="password"  class="form-control" id="password" [(ngModel)]='user.password'name='pass'required onKeypress="javascript:if(event.keyCode == 32)event.returnValue = false;"/>
+       </div>
+      </div>
+      
+    
+  <button type="button" class="btn btn-default" ng-disabled='loginForm.$invalid' (click)="logins(user)">登录</button>
+  </form>
+    </div>
+   </div>
+  </div>

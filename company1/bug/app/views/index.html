@@ -1,0 +1,64 @@
+	<my-dashboard></my-dashboard>
+  <div  ng-init="initQuery(currentDate)">
+	 <div class="bottomTab">
+	   <!-- <select ng-model="params.type" id="selectop">
+        <option value="1">日</option>
+        <option value="2">月</option>
+        <option value="3">年</option>
+         </select> -->
+
+  
+	  <p><input class="form-control" type="text"   id='dealTimeLimit'/></p><!-- 
+	  <p><input class="form-control" type="text"   id='dealTimeLimit2' ng-if="params.type=='2'"/></p>
+	  <p><input class="form-control" type="text"   id='dealTimeLimit3' ng-if="params.type=='3'"/></p> -->
+   <!--  <button class="search-button" ng-click="queryList()" >查询</button> -->
+      <table class="table">
+        <thead>
+          <tr>
+           <th style="width: 80px;"><input type="checkbox" ng-model="checkboxs" ng-click="allCheckbox(checkboxs)">全选</th>
+            <th style="width: 90px;" data-toggle="modal"
+              data-target="#checkCoopera">id</th>
+            <th style="width: 80px;">name</th>
+            <th style="width: 150px;">type</th>
+            <th style="width: 100px;">address</th>
+            <th style="width: 110px;">date</th>
+            <th style="width: 80px;">操作</th>
+          </tr>
+          <tr *ngFor="let com of company">
+          <td><input type="checkbox" ng-model="com.checkbox"></td>
+            <td>{{com.id}}</td>
+            <td>{{com.name}}</td>
+            <td>{{com.type}}</td>
+            <td>{{com.address}}</td>
+            <td>{{com.date}}</td>
+            <td><a ng-click="expression">修改</a>|<a ng-click="expression">删除</a></td>
+          </tr>
+        </thead>
+      </table>
+       <!-- <page total-count="users.totalCount" show-max-page="5"
+             current-page="currentDate.goPage" page-count="currentDate.pageSize"
+             go-page="initQuery(currentDate)"></page> -->
+    </div>
+  </div>
+ <script>
+ 	/*$('#dealTimeLimit1').datepicker({
+	    language:'zh-CN',
+	    format:'yyyy-mm-dd',
+	    maxViewMode:0,
+	    minViewMode:0,
+	    viewModel:'years'
+	  });
+ 	$('#dealTimeLimit2').datepicker({
+	    language:'zh-CN',
+	    format:'yyyy/mm',
+	    maxViewMode:1,
+	    minViewMode:1
+	  });
+ 	$('#dealTimeLimit3').datepicker({
+	    language:'zh-CN',
+	    format:'yyyy',
+	    maxViewMode:2,
+	    minViewMode:2
+	  });*/
+ </script>
+  

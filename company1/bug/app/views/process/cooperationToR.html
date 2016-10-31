@@ -1,0 +1,346 @@
+<div class="content" id="model_1" ng-init="initCooperation()">
+  <div class="topForm">
+    <div class="form_title">协作单待阅</div>
+    <div class="content" table-scroll="">
+      <div class="form-inline row" style="padding: 0 10px;">
+        <div class="form-group col-sm-4">
+          <label>工单编号</label> <input type="text" class="form-control"
+            id="workOrderId" ng-model="coopeation.workOrderId">
+        </div>
+        <div class="form-group col-sm-4">
+          <label style="margin-right: 4px;">发起单位</label><select class="form-control"
+            ng-model="coopeation.createEmploye"
+            ng-options="x.companyName as x.companyName for x in companys"><option
+              value="" selected="">全部</option></select>
+        </div>
+        <div class="form-group col-sm-4">
+          <label>发起时间</label> <input type="text" class="form-control"
+            readonly="readonly" ng-model="coopeation.createTime"
+            id="createTime">
+        </div>
+      </div>
+      <div class="form-inline row"
+        style="margin-top: 10px; padding: 0 10px;">
+        <div class="form-group col-sm-4">
+          <label style="margin-right: 4px;">业务类型</label><select class="form-control"
+            ng-model="coopeation.businessType"
+            ng-options="x.businessName as x.businessName for x in businessTypeAll"><option
+              value="">全部</option></select>
+        </div>
+        <div class="form-group col-sm-4">
+          <label>标题</label> <input type="text" class="form-control"
+            id="acceptance" ng-model="coopeation.workOrderTitle">
+        </div>
+      </div>
+      <div class="form-inline row"
+        style="margin-top: 10px; border-top: 1px solid #ccc; padding: 10px;">
+        <div class="form-group col-sm-3">
+          <button type="button" class="btn" ng-model="users"
+            ng-click="coopTorQuery(coopeation,1)">
+            <span class="glyphicon glyphicon-search"
+              style="margin-right: 5px;"></span>查询
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottomTab">
+    <div class="thead" id="thead" ng-init="coopTorQuery(coopeation,1)">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 90px;" data-toggle="modal"
+              data-target="#checkCoopera">工单标号</th>
+            <th style="width: 80px;" ng-click='changeOrderType("urgentLevel")'>紧急程度</th>
+            <th style="width: 150px;">标题</th>
+            <th style="width: 100px;">发起单位</th>
+            <th style="width: 110px;">发起联系方式</th>
+            <th style="width: 80px;">业务类型</th>
+            <th style="width: 150px;" ng-click='changeOrderType("createTime")'>发起时间</th>
+            <th style="width: 150px;"
+              ng-click='changeOrderType("dealTimeLimit")'>处理时限</th>
+            <th style="width: 80px;">受理单位</th>
+            <th style="width: 150px;">受理方联系方式</th>
+            <th style="width: 150px;">处理时间</th>
+            <th style="width: 80px;">操作</th>
+            <th style="width: 18px;"></th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="tbody" id="tbody">
+      <table class="table">
+        <tbody>
+          <tr
+            ng-repeat="users in userData.resultList | filter: create.workOrderId | orderBy:order+orderType"
+            ng-class="{backgroundRow:users.isMark==1}">
+            <td style="width: 90px;"><a data-toggle="modal"
+              data-target="#checkCoopera" ng-click="coopeationInfo(users,1)">{{users.workOrderId}}</a></td>
+            <td style="width: 80px;" title="{{users.urgentLevel}}">{{users.urgentLevel
+              | urgentLevel}}</td>
+            <td style="width: 150px;" title="{{users.workOrderTitle}}">{{users.workOrderTitle}}</td>
+            <td style="width: 100px;" title="{{users.createEmploye}}">{{users.createEmploye}}</td>
+            <td style="width: 110px;" title="{{users.createPersonInfor}}">{{users.user.mobile}}</td>
+            <td style="width: 80px;" title="{{users.businessType}}">{{users.businessType}}</td>
+            <td style="width: 150px;" title="{{users.createTime}}">{{users.createTime
+              | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td style="width: 150px;"
+              title="{{users.dealTimeLimit | date:'yyyy-MM-dd HH:mm:ss'}}">{{users.dealTimeLimit
+              | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+            <td colspan="4" style="width: 460px; padding: 0 !important;"><table
+                class="secondTab">
+                <tr ng-repeat="cooperationMsg in users.dealList">
+                  <td style="width: 80px;">{{cooperationMsg.companyName}}</td>
+                  <td style="width: 150px;"><span
+                    ng-if="cooperationMsg.dealPerson==null">{{cooperationMsg.user.userName}}|{{cooperationMsg.user.mobile}}</span>
+                    <span ng-if="cooperationMsg.dealPerson!=null">{{cooperationMsg.dealPerson}}</span></td>
+                  <td style="width: 150px;">{{cooperationMsg.dealTime |
+                    date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                  <td style="width: 80px;"><span
+                    ng-show="cooperationMsg.dealStatus==0">未处理</span> <span
+                    ng-show="cooperationMsg.dealStatus==1"><a
+                      data-toggle="modal" data-target="#checkCoopera"
+                      ng-click="coopeationInfo(users,2,cooperationMsg,cooperationMsg.companyName)">审核</a></span> <span
+                    ng-show="cooperationMsg.dealStatus==2">已审核</span></td>
+                </tr>
+              </table></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <page total-count="userData.totalCount" show-max-page="5"
+      current-page="coopeation.goPage" page-count="coopeation.pageSize"
+      go-page="coopTorQuery(coopeation,0)"></page>
+  </div>
+  <div class="modal fade" id="checkCoopera" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" style="text-align: -webkit-center;">
+    <div class="model-dialog">
+      <div class="modal-content" style="width: 800px; margin: 50px auto;">
+        <div class="modal-header" style="padding: 10px 15px 30px 0;">
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div style="border: 1px solid rgba(62, 77, 97, 0.06)">
+            <table>
+              <tr>
+                <td style="width: 60px;" align="center"><b>工单编号:</b></td>
+                <td>{{coopeationMsg.workOrderId}}</td>
+                <td style="width: 60px;" align="center"><b>发起单位:</b></td>
+                <td>{{coopeationMsg.createEmploye}}</td>
+                <td style="width: 100px;" align="center"><b>发起方联系方式:</b></td>
+                <td>{{coopeationMsg.user.userName}}|{{coopeationMsg.user.mobile}}</td>
+              </tr>
+              <tr>
+                <td align="center"><b>标题:</b></td>
+                <td colspan="5"><input type="text" readonly="readonly"
+                  class="form-control form-data"
+                  ng-model="coopeationMsg.workOrderTitle" style="width: 100%"
+                  disabled="disabled"></td>
+              </tr>
+              <tr>
+                <td align="center"><b>紧急程度:</b></td>
+                <td>{{coopeationMsg.urgentLevel | urgentLevel}}</td>
+                <td align="center"><b>业务类型:</b></td>
+                <td>{{coopeationMsg.businessType}}</td>
+              </tr>
+              <tr>
+                <td style="width: 90px;" align="center"><b>协作内容描述:</b></td>
+                <td colspan="5"><textarea rows="4" cols="90"
+                    class="form-control form-data"
+                    ng-model="coopeationMsg.content" readonly="readonly"></textarea></td>
+              </tr>
+              <tr>
+                <td align="center"><b>附件:</b></td>
+                <td colspan="5">{{coopeationMsg.workFile.fileName}} <a
+                  ng-show="coopeationMsg.workFile!=null"
+                  ng-click="coopeationDownload(coopeationMsg.workFile.fileName,coopeationMsg.workFile.filePath)">下载</a></td>
+              </tr>
+
+            <tr ><td colspan="6"><hr style="border: 1px solid rgba(62, 77, 97, 0.06)"><td></tr>
+            </table>
+          </div>
+          <hr style="border: 1px solid rgba(62, 77, 97, 0.06)">
+          <div style="height: 200px; overflow-y: auto;">
+            <div class="modal-table"
+              style="border: 1px solid rgba(62, 77, 97, 0.06)"
+              ng-repeat="dealMsg in coopeationMsg.dealList">
+              <table>
+                <tbody>
+                  <tr ng-class="{backgroundRow:dealMsg.companyName==coopeationMsg.companyNames}">
+                    <td style="width: 90px;" align="center"><b>受理单位:</b></td>
+                    <td>{{dealMsg.companyName}}</td>
+                    <td align="center" style="width: 100px;"><b>受理方联系方式:</b></td>
+                    <td align="center"><span ng-if="dealMsg.dealPerson==null">{{dealMsg.user.userName}}|{{dealMsg.user.mobile}}</span>
+                      <span ng-if="dealMsg.dealPerson!=null">{{dealMsg.dealPerson}}</span></td>
+                    <td><b>受理时间:</b></td>
+                    <td>{{dealMsg.dealTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                  </tr>
+                  <tr>
+                    <td style="width: 90px;" align="center"><b>处理意见:</b></td>
+                    <td colspan="5"><textarea rows="4" readonly="readonly"
+                        cols="90" class="form-control form-data"
+                        ng-model="dealMsg.dealOpinion"></textarea></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 90px;" align="center"><b>处理附件:</b></td>
+                    <td colspan="5">{{dealMsg.file.fileName}} <a
+                      ng-show="dealMsg.file!=null"
+                      ng-click="coopeationDownload(dealMsg.file.fileName,dealMsg.file.filePath)">下载</a></td>
+                  </tr>
+                  <tr ng-if="dealMsg.dealStatus==2">
+                   <td style="width: 90px;" align="center" ><B>审核结果:</B></td>
+                   <td>审核通过</td>
+              </tr>
+              
+              <tr ng-if="dealMsg.dealStatus==2">
+                  <td style="width: 90px;" align="center"><B>审核单位: </B></td>
+                  <td>{{coopeationMsg.createEmploye}}</td>
+               
+                 <td style="width: 60px;" align="center"><B> 审核人:</B> </td>
+                  <td>{{coopeationMsg.user.userName}}</td>
+                  <td style="width: 90px;" align="center"><B>联系方式:</B> </td>
+                 <td >{{coopeationMsg.user.mobile}}</td>
+             </tr>
+  
+
+            <tr ng-if="dealMsg.dealStatus==2">
+                  <td style="width: 90px;" align="center"><b>审核意见:</b></td>
+                   <td colspan="5" > 
+                     <textarea class="form-control" ng-model="dealMsg.examine" id="one" rows="5" cols="100"  readOnly="true" name="examine" pattern="^[\u4E00-\u9FA5A-Za-z0-9_+,|(|)|（|）|@|!|！|#|￥|$|%|^|……|&|=|{|}|【|】|、|‘|’|?|？|；|;,+.+，+。+\n+ +-]+$"></textarea>
+                     <div ng-messages="cooperation.examine.$error">
+                      <div ng-message="pattern">
+                        <span style="color: red">不准输入特殊字符如(< > / \ | : " *  [ ])</span>
+                      </div>
+                    </div>   
+                  </td>
+              </tr>
+                </tbody>
+              </table>
+              
+              <hr style="border: 1px solid rgba(62, 77, 97, 0.06)">
+            </div>
+            <div class="modal-table"
+              style="border: 1px solid rgba(62, 77, 97, 0.06)"ng-show="coopeationMsg.status===2">
+              <form name="cooperation">
+              <table>
+                <tbody>
+                  <tr>
+                     <td style="width: 60px;" align="center"><b>审核结果:</b></td>
+                    <td style="width: 60px;"><input type="radio" id="agree"
+                      name="coopeatAgree" ng-model="coopeationMsg.isPass" value="1">
+                      <label for="agree">通过</label></td>
+                    <td style="width: 60px;"><input type="radio" id="noAgree"
+                      name="coopeatAgree" ng-model="coopeationMsg.isPass"
+                      value="-1"> <label for="noAgree">不通过</label></td>
+                    <td style="width: 60px;"><input type="checkbox"
+                      id="heavyPie" ng-model="coopeationMsg.school"> <label
+                      for="heavyPie">重派</label></td>
+                    <td style="padding-right: 31px;"><div style="border: 1px solid rgba(62, 77, 97, 0.06)">
+                        <table>
+                          <tr>
+                            <td style="width: 60px;">处理时限:</td>
+                            <td><input type="text" id="dealTimeLimit"
+                              readonly="readonly"
+                              ng-model="coopeationMsg.dealTimeLimit"
+                              ng-disabled="coopeationMsg.school===false"
+                              class="form-control form-data"
+                              style="background-color: #fff"></td>
+                            <td style="width: 60px;">受理单位:</td>
+                            <td><div class="dropdown">
+                                <input type="text"
+                                  ng-click="checkedData('dealEmployName')"
+                                  readonly="readonly"
+                                  ng-model="coopeationMsg.dealEmploye" id="dropdownMenu1"
+                                  data-toggle="dropdown"
+                                  ng-disabled="coopeationMsg.school===false"
+                                  aria-haspopup="true" aria-expanded="true"
+                                  class="form-control form-data dropdown-toggle"
+                                  style="background-color: #fff;">
+                                <ul class="dropdown-menu"
+                                  aria-labelledby="dropdownMenu1"
+                                  style="min-width: 132px; padding: 5px 10px;">
+                                  <li ng-repeat="dealEmploye in dealEmployes"><div
+                                      onmouseover="this.className='change'"
+                                      onmouseout="this.className='normal'" class="normal">
+                                      <input id="dealEmployName" type="checkbox"
+                                        value="{{dealEmploye.name}}" name="dealEmployName"
+                                        ng-click="selectData(dealEmploye.name)"> <span
+                                        for="dealEmployName" style="margin-left: 12px"
+                                        class="ng-binding"
+                                        ng-click="selectData(dealEmploye.name)">{{dealEmploye.name}}</span>
+                                    </div></li>
+                                </ul>
+                                <div class="glyphicon glyphicon-triangle-bottom"
+                                  ng-click="checkedData('dealEmployName')"
+                                  style="position: absolute; top: 12px; right: 5px;"
+                                  data-toggle="dropdown"></div>
+                              </div></td>
+                          </tr>
+                        </table>
+                      </div></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 90px;" align="center"><b>审核单位:</b></td>
+                    <td style="width: 60px;">{{person.company.companyName}}</td>
+                    <td style="width: 110px;"><b>审核人联系方式:</b></td>
+                    <td colspan="2">{{person.userName}}|{{person.mobile}}</td>
+                  </tr>
+                  <tr>
+                    <td style="width: 90px;" align="center"><b>审核意见:</b></td>
+                    <td colspan="4"><textarea rows="4" cols="60"
+                        pattern="^[\u4E00-\u9FA5A-Za-z0-9_+,|(|)|（|）|@|!|！|#|￥|$|%|^|……|&|=|{|}|【|】|、|‘|’|?|？|；|;,+.+，+。+\n+ +-]+$"
+                        class="form-control form-data"
+                        ng-model="coopeationMsg.examine" name="examine"></textarea>
+                        <div ng-messages="cooperation.examine.$error">
+                      <div ng-message="pattern">
+                        <span style="color: red">不准输入特殊字符如(< > / \ | : " *  [ ])</span>
+                      </div>
+                    </div> </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+          <span ng-if="coopeationMsg.count>1 && coopeationMsg.status===2"><span
+            ng-if="coopeationMsg.isPass==='1'"><button type="button"
+                class="btn btn-primary"
+                ng-disabled="cooperation.$invalid || coopeationMsg.dealEmploye==='' && coopeationMsg.isPass==='1' && coopeationMsg.school"
+                data-dismiss="modal" ng-click="checkBy(coopeationMsg)">提交</button></span>
+            <span ng-if="coopeationMsg.isPass==='-1'"><button
+                type="button" class="btn btn-primary"
+                ng-disabled="cooperation.$invalid ||coopeationMsg.school===false" data-dismiss="modal"
+                ng-click="checkBy(coopeationMsg)">提交</button></span></span> <span
+            ng-if="coopeationMsg.count===1 && coopeationMsg.status===2"><span
+            ng-show="coopeationMsg.school"><button type="button"
+                ng-disabled="cooperation.$invalid ||coopeationMsg.dealEmploye==='' && coopeationMsg.isPass==='1'"
+                class="btn btn-primary" data-dismiss="modal"
+                ng-click="checkBy(coopeationMsg)">提交</button></span> <span
+            ng-show="coopeationMsg.school===false"><button
+                type="button" class="btn btn-primary" data-dismiss="modal"
+                ng-disabled="cooperation.$invalid ||coopeationMsg.isPass==='-1'"
+                ng-click="checkBy(coopeationMsg)">工单关闭</button></span></span>
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    $('#tbody').scroll(function() {
+      $('#thead').scrollLeft($(this).scrollLeft());
+    });
+    $('.page a').click(function() {
+      $('.page a').removeClass('activeA');
+      $(this).addClass('activeA');
+    });
+    $('#createTime').datepicker({
+      language : 'zh-CN',
+      format : 'yyyy/mm/dd',
+      autoclose : true
+    });
+  </script>
+</div>
