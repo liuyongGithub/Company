@@ -1,0 +1,106 @@
+<div class="content content-wg" ng-init='initParams()'>
+<form name='workOrderForm'>
+  <div class="announce topForm create">
+      <div class="form-inline row">
+        <div class="form-group col-sm-5">
+          <label>发起单位:</label>
+          <span style="font-size: 24px;">{{workOrder.createEmploye}}</span>
+        </div>
+        <div class="form-group col-sm-5">
+          <label>发起联系方式:</label>
+          <select class="form-control" ng-model="workOrder.createPersonInfor">
+            <option ng-repeat="user in users" value="{{user.id}}-{{user.userName}}">{{user.userName}} {{user.mobile}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-inline row">
+        <div class="form-group col-sm-10 ">
+          <label>标题:</label>
+          <input class="form-control" name='workOrderTitle' placeholder="" maxlength="50" pattern="^[\u4E00-\u9FA5A-Za-z0-9_+,|(|)|（|）|@|!|！|#|￥|$|%|^|……|&|=|{|}|【|】|、|‘|’|?|？|；|;,+.+，+。+\n+ +-]+$" required ng-model="workOrder.workOrderTitle">
+          <div ng-messages="workOrderForm.workOrderTitle.$error">
+            <div ng-message='pattern'><span style='color:red'>不准输入特殊字符如(< > / \ | : " *  [ ])</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-inline row">
+        <div class="form-group col-sm-5">
+          <label>紧急程度</label>
+          <select class="form-control" required ng-model="workOrder.urgentLevel">
+            <option value='1'>高</option>
+            <option value='2'>中</option>
+            <option value='3'>低</option>
+          </select>
+        </div>
+        <div class="form-group col-sm-5" >
+          <label >业务类型</label>
+          <select class="form-control" ng-change="businessChange(workOrder.businessType)" ng-model="workOrder.businessType" ng-options="bussiness.name as bussiness.name for bussiness in businessTypes">
+          </select>
+        </div>
+      </div>
+      <div class="form-inline row">
+        <div class="form-group col-sm-5">
+          <label>处理时限</label>
+          <input class="form-control" type="text" onkeydown="return false" onkeyup="return false" oncontextmenu="return false" required ng-model="workOrder.dealTimeLimit" min="{{workOrder.dateTimeChecked | date:'yyyy-MM-dd'}}"id='dealTimeLimit'>
+        </div>
+        <style type="text/css">
+          #dealEmployName{
+            width:calc(100% - 220px) !important;
+          }
+          #dealEmployName+span{
+              margin-left:-30px;
+          }
+        </style>
+        <div class="form-group col-sm-5">
+          <div class="dropdown">
+            <label>受理单位</label>
+            <input type='text' required ng-model="workOrder.dealEmploye" readonly="readonly" ng-click="checkedData('dealEmployName')" id="dropdownMenu1"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+              class='form-control form-data dropdown-toggle' />
+              <ul class="dropdown-menu" style="left: 89px;top: 30px;width: calc(100% - 100px) !important;" aria-labelledby="dropdownMenu1">
+                <li ng-repeat="dealEmploye in dealEmployes">
+                  <div onmouseover="this.className='change'" onmouseout="this.className='normal'" class="normal">
+                    <input id='dealEmployName' type="checkbox" value='{{dealEmploye.name}}' name='dealEmployName' ng-click="selectData(dealEmploye.name)" /> 
+                    <span  ng-click="selectData(dealEmploye.name)">{{dealEmploye.name}}</span>
+                  </div>
+                </li>
+              </ul>
+              <div class="glyphicon glyphicon-triangle-bottom" ng-click="checkedData('dealEmployName')" style="position:absolute;top:12px;right:15px;" data-toggle="dropdown"></div>
+           </div>
+        </div>
+      </div>
+      <div class="form-inline row">
+        <div class="form-group col-sm-10">
+          <label>协作内容描述</label>
+          <textarea class="form-control" name='content'  pattern="^[\u4E00-\u9FA5A-Za-z0-9_+,|(|)|（|）|@|!|！|#|￥|$|%|^|……|&|=|{|}|【|】|、|‘|’|?|？|；|;,+.+，+。+\n+ +-]+$"  required ng-model="workOrder.content"></textarea>
+          <div ng-messages="workOrderForm.content.$error">
+            <div ng-message='pattern'><span style='color:red'>不准输入特殊字符如(< > / \ | : " *  [ ])</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-inline row">
+        <div class="form-group col-sm-5">
+          <label>附件</label>
+          <input type="file" name="filePath" file-model='filePath' id="filePath" class="form-control">
+        </div>
+        <div class="form-group col-sm-3">
+          <span class="qxsc" style="display: inline-block;padding-top: 5px;" ng-click="clearFile('filePath',1)"><img src="images/icon_02.png"></span>
+        </div>
+      </div>
+    <div class="mybtn">
+      <button class="btn btn-default true" ng-disabled="workOrderForm.$invalid" ng-click="workAddUpload(workOrder)">
+        <span class="glyphicon glyphicon-ok"></span>确定
+      </button>
+      <button class="btn btn-default remove" ng-click="clearFile('filePath',2)">
+        <span class="glyphicon glyphicon-remove"></span>取消
+      </button>
+    </div>
+  </div>
+  </form>
+</div>
+<script>
+  $('#dealTimeLimit').datepicker({
+  language:'zh-CN',
+  format:'yyyy/mm/dd',
+  autoclose:true,
+});
+</script>

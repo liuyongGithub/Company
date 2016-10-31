@@ -1,0 +1,85 @@
+<div class="content" ng-init="sponsorTypeQuery()">
+	<div class="topForm">
+		<div class="form_title">协作单统计</div>
+		<div class="content"  table-scroll>
+			<form name="form" id="queryScheduling" action="/processOm/workOrder/export" method="post">
+				<input type="hidden"  name="image" id="image" value=""/> <!-- 图片 -->
+				<input type="hidden"  name="dataMessage" id="dataMessage" value="{{dataMessage}}"/> 
+				<input type="hidden"  name="exportType" id="exportType" value="excel"/>
+				<input type="hidden"  name="groupType" id="groupType" value=""/> 
+			</form>
+			<div class="form-inline row" ng-init="sponsorTypeQuery()" style="padding-left: 10px;">
+				<div class="form-group col-sm-4">
+					<label>统计方式</label>
+					<select class="form-control" ng-model="str.groupType">
+						<option value="createMonth">按月统计</option>
+						<option value="createEmploye">按支撑单位统计</option>
+						<option value="businessType">按业务类型统计</option>
+					</select>
+				</div>
+				<div class="input-daterange" id="datepicker">
+				  <div class="form-group col-sm-4" id="form-group col-sm-4">
+					<label>月份</label>
+					<input type="text" ng-model="start" onkeyUp='return false'  onkeyDown='return false' id="start" name="start" class="form-control" datepicker="timeParam" />
+					<input type="hidden" ng-model="str.starTime"/>
+				</div>
+				<div class="form-group col-sm-4">
+					<span style="margin-right: 25px;">-</span>
+					<input type="text" ng-model="end" onkeyUp='return false' onkeyDown='return false' id="end" name="end" class="form-control" datepicker="timeParam" />
+					<input type="hidden" ng-model="str.starTime"/>
+				</div>
+				</div>
+			</div>
+			<div class="form-inline row" style="margin-top: 10px;padding-left: 10px;">
+				<div class="form-group col-sm-4">
+					<label>支撑单位</label>
+					<select class="form-control" ng-model="str.createEmploye">
+						<option value="-1">全部</option>
+						<option ng-repeat="comp in companys" value="{{comp.companyName}}">{{comp.companyName}}</option>
+					</select>
+				</div>
+				<div class="form-group col-sm-4">
+					<label>业务类型</label>
+					<select class="form-control" ng-model="str.businessType">
+						<option value="-1">全部</option>
+						<option ng-repeat="x in businessTypeAll" value="{{x.businessName}}">{{x.businessName}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-inline row" style="margin-top: 10px;border-top: 1px solid #ccc;padding: 10px;">
+	            <div class="form-group col-sm-6">
+					<button class="btn"  ng-click="echart(str)"><span class="glyphicon glyphicon-search" style="margin-right:5px;"></span>查询</button>
+					<button class="btn btn-default remove" ng-click="exportExcel(str)">导出</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="bottomTab bottom-chart">
+		<div id="lh-chart"></div>
+	</div>
+</div>
+<script type="text/javascript">
+	$('#lh-icons>i').click(function(e){
+		if($(e.target).hasClass('active')){
+			return;
+		}else{
+			$('#lh-icons>i.active').removeClass('active');
+			$(e.target).addClass('active');
+		}
+	});
+	$('.input-daterange').datepicker({
+	    format: "yyyy/mm",
+	    minViewMode: 1,
+	    language: "zh-CN"
+	});
+/*	$('#start').datepicker({
+	language:'zh-CN',
+	format:'yyyy/mm',
+	autoclose:true,
+	});
+	$('#end').datepicker({
+	language:'zh-CN',
+	format:'yyyy/mm',
+	autoclose:true,
+	});*/
+</script>

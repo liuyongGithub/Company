@@ -1,0 +1,42 @@
+<div class='main-menu' main-menu >
+	<header>
+		<span></span>
+	</header>
+	<div class="design-menu" border="false">
+		<ul id="rolinul" ng-if="index==0">
+			<li><a ui-sref="menu.index"><label ng-class="{true: 'active', false: ''}[isActive=='menu.index']"><span class="menu-span">我的工作台</span></label></a></li>
+			<li><a ui-sref="menu.bar"><label ng-class="{true: 'active', false: ''}[isActive=='menu.bar']"><span class="menu-span">柱状图</span></label></a></li>
+			<li><a ui-sref="menu.line"><label ng-class="{true: 'active', false: ''}[isActive=='menu.line']"><span class="menu-span">折线图</span></label></a></li>
+			<li><a ui-sref="menu.pie"><label ng-class="{true: 'active', false: ''}[isActive=='menu.pie']"><span class="menu-span">饼图</span></label></a></li>
+			<li><a ui-sref="menu.map"><label ng-class="{true: 'active', false: ''}[isActive=='menu.map']"><span class="menu-span">地图</span></label></a></li>
+		</ul>
+	</div>
+</div>
+<div class='main-content' main-content style='height:100%;padding-bottom: 6%'>
+	<header>
+		<div class="top-menu" id="top-menu">
+			<ul>
+				<li ng-click="mainMenuClick(0)"ui-sref="menu.index"><span ng-class="{true: 'active', false: ''}[index==0]">首页</span></li>
+				<li ng-click="mainMenuClick(1)" ui-sref='menu.cooperationSe'><span ng-class="{true: 'active', false: ''}[index==1]">物联网协作管理</span></li>
+				<li ng-click="mainMenuClick(2)"ui-sref="menu.notice"><span ng-class="{true: 'active', false: ''}[index==2]">公告栏管理</span></li>
+				<li ng-click="mainMenuClick(3)"ui-sref="menu.personalInformation"><span ng-class="{true: 'active', false: ''}[index==3]">信息管理</span></li>
+				<li ng-click="mainMenuClick(4)"ui-sref="menu.contactList" ng-show="person.role.id!=0"><span ng-class="{true: 'active', false: ''}[index==4]">系统管理</span></li>
+			</ul>
+			<!-- <ul ng-show='person.role.id == 0'>
+				<li ng-click="mainMenuClick(0)"ui-sref="menu.index"><span ng-class="{true: 'active', false: ''}[index==0]">首页</span></li>
+				<li ng-click="mainMenuClick(1)" ui-sref='menu.cooperationCreate'><span ng-class="{true: 'active', false: ''}[index==1]">物联网协作管理</span></li>
+				<li ng-click="mainMenuClick(2)"ui-sref="menu.notice"><span ng-class="{true: 'active', false: ''}[index==2]">公告栏管理</span></li>
+				<li ng-click="mainMenuClick(3)"ui-sref="menu.personalInformation"><span ng-class="{true: 'active', false: ''}[index==3]">信息管理</span></li>
+				<li ng-click="mainMenuClick(4)"ui-sref="menu.contactList" ng-show="person.role.id!=0"><span ng-class="{true: 'active', false: ''}[index==4]">系统管理</span></li>
+			</ul> -->
+		</div>
+		<div class="usermsg">
+			<span class="left">
+				<!-- <label class="name" ng-model='person.userName'>{{person.userName}}</label> -->
+				<a ng-click='clearCookie()'>注销</a>
+			</span>
+			<span class="right"></span>
+		</div>
+	</header>
+	<div ui-view="view"></div>
+</div>
